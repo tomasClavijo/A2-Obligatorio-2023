@@ -4,6 +4,7 @@
 using namespace std;
 
 
+// Decido utilizar un mergeSort, otra opción es utilizar un minHeap
 void merge(int* arr, int izq, int medio, int der) {
     int i, j, k;
     int n1 = medio - izq + 1;
