@@ -4,34 +4,6 @@
 #include <math.h>
 using namespace std;
 
-char** split(const char* str, char delimiter, int& numSubstrings) {
-    int count = 1;
-    int length = strlen(str); // Longitud de cadena de entrada
-    for (int i = 0; i < length; i++) {
-        if (str[i] == delimiter) {
-            count++; // Contabilizo cantidad de delimitadores (veces que aparece el espacio)
-        }
-    }
-
-    char** substrings = new char*[count];
-    int index = 0;
-    int start = 0;
-
-    for (int i = 0; i <= length; i++) {
-        if (str[i] == delimiter || i == length) {
-            int substringLength = i - start;
-            substrings[index] = new char[substringLength + 1];
-            strncpy(substrings[index], str + start, substringLength);
-            substrings[index][substringLength] = '\0';
-            index++;
-            start = i + 1;
-        }
-    }
-
-    numSubstrings = count;
-    return substrings;
-}
-
 class NodoHash{
     public:
         string dato;
@@ -45,6 +17,7 @@ class NodoHash{
 class Hash{
     private:
         NodoHash* vec;
+        //NodoHash* vecOrdenado;
         int cantidadAlumnos;
         int largo; // Largo del vector
 
@@ -69,7 +42,12 @@ class Hash{
         int funcionHash(string s){
             int total = 0;
             for (int i = 0; i < s.length(); i++){
-                total = (total + int(s[i]) * (int)pow(37, i)) % largo;
+                if(i < 5){
+                    total = (total + s.at(i)*(int)(pow(31,i)))%largo;
+                    
+                }else{
+                    total = (total + s.at(i))%largo;
+                }
             }
             return total;
         }
@@ -79,6 +57,7 @@ class Hash{
             this->largo = primoSup(esperados);
             this->vec = new NodoHash[largo];
             this->cantidadAlumnos = 0;
+            //this->vecOrdenado = new NodoHash[esperados];
             for (int i =0; i < largo; i++){
                 vec[i].dato = "";
                 vec[i].promedio = 0;
@@ -96,6 +75,7 @@ class Hash{
                 vec[posicion].dato = s;
                 vec[posicion].promedio = promedio;
                 vec[posicion].hayDato = true;
+                //vecOrdenado[cantidadAlumnos] = vec[posicion];
                 cantidadAlumnos++;
             } else {
                 while (posicion < largo && vec[posicion].hayDato == true){
@@ -116,28 +96,71 @@ class Hash{
                     vec[posicion].dato = s;
                     vec[posicion].promedio = promedio;
                     vec[posicion].hayDato = true;
+                    //vecOrdenado[cantidadAlumnos] = vec[posicion];
                     cantidadAlumnos++;
                 } else {
                     vec[posicion].dato = s;
                     vec[posicion].promedio = promedio;
                     vec[posicion].hayDato = true;
+                    //vecOrdenado[cantidadAlumnos] = vec[posicion];
                     cantidadAlumnos++;
                 }
             }
         }
 
-        void imprimirElementos(){
-            for (int i = 0; i < largo; i++){
-                if(vec[i].hayDato == true){
-                    cout << vec[i].dato << " " << vec[i].promedio << endl;
+        NodoHash buscar (string nombre){
+            int posicion = funcionHash(nombre);
+            if (vec[posicion].hayDato == true && vec[posicion].dato == nombre){
+                return vec[posicion];
+            } else {
+                while (posicion < largo && vec[posicion].hayDato == true){
+                    if (nombre == vec[posicion].dato){
+                        return vec[posicion];
+                    }
+                    posicion++;
                 }
+                if (posicion == largo){
+                    posicion = 0;
+                    while (posicion < funcionHash(nombre) && vec[posicion].hayDato == true){
+                        if (nombre == vec[posicion].dato){
+                            return vec[posicion];
+                        }
+                        posicion++;
+
+                    }
+                }
+            }
+        }
+
+        void imprimirElementos(string* vec){
+            for (int i = 0; i < cantidadAlumnos; i++){
+                NodoHash x = buscar(vec[i]);
+                cout << x.dato << " " << x.promedio << endl;
             }
         }
 };
 
 int main(){
-    int cantidadAlumnos; // Lineas que se esperan
-    int promedio; 
+    int cantidadAlumnos = 0; // Lineas que se esperan
+    int promedio = 0; 
     cin >> cantidadAlumnos;
-
+    Hash* h = new Hash(cantidadAlumnos);
+    //string vecNombres [cantidadAlumnos];
+    for(int i = 0; i < cantidadAlumnos; i++){
+        string nombre;
+        int cantidadNotas = 0;
+        int sumaTotal= 0;
+        cin >> nombre >> cantidadNotas;
+        //vecNombres[i] = nombre;
+        for (int j = 0; j < cantidadNotas; j++){
+            int x;
+            cin >> x;
+            sumaTotal += x;
+        }
+        promedio = sumaTotal / cantidadNotas;
+        h->insertar(nombre, promedio);
+        NodoHash x = h->buscar(nombre);
+        cout << x.dato << " " << x.promedio << endl;
+    }
+    //h->imprimirElementos(vecNombres);
 }
