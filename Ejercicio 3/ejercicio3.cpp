@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <cstdio>
 
 using namespace std;
 
@@ -12,7 +13,7 @@ struct Persona {
 struct Reserva {
     Persona* personas;
     int numPersonas;
-    double promedio;
+    float promedio;
 };
 
 class MaxHeap {
@@ -85,16 +86,6 @@ public:
     }
 };
 
-string formatearPromedio(double promedio) {
-    char buffer[10];
-    if (promedio == static_cast<int>(promedio)) {
-        sprintf(buffer, "%.0f", promedio);
-    } else {
-        sprintf(buffer, "%.2f", promedio);
-    }
-    return buffer;
-}
-
 int main() {
     int numReservas;
     cin >> numReservas;
@@ -109,10 +100,10 @@ int main() {
         reserva.numPersonas = numPersonas;
         reserva.personas = new Persona[numPersonas];
 
-        int sumaVuelos = 0;
+        float sumaVuelos = 0;
         for (int j = 0; j < numPersonas; j++) {
             string pasaporte;
-            int vuelos;
+            float vuelos;
             cin >> pasaporte >> vuelos;
             sumaVuelos += vuelos;
 
@@ -120,14 +111,19 @@ int main() {
             reserva.personas[j].vuelos = vuelos;
         }
 
-        reserva.promedio = static_cast<double>(sumaVuelos) / numPersonas;
+        reserva.promedio = sumaVuelos / static_cast<float>(numPersonas);
         heap.insertar(reserva);
     }
 
     // Imprimir las reservas ordenadas en forma descendente
     while (!heap.esVacio()) {
         Reserva reserva = heap.eliminarMax();
-        cout << formatearPromedio(reserva.promedio) << " ";
+        if (reserva.promedio == static_cast<int>(reserva.promedio)) {
+            printf("%.0f", reserva.promedio);
+        } else {
+            printf("%.2f", reserva.promedio);
+        }
+        cout << " "; 
         for (int i = 0; i < reserva.numPersonas; i++) {
             cout << reserva.personas[i].pasaporte << " ";
         }

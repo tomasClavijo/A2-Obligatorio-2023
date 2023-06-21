@@ -1,54 +1,57 @@
 #include <iostream>
-#include <string>
-#include <cstring>
-
 using namespace std;
 
-int ** initMatriz(int filas, int columnas){
-	int ** m = new int*[filas]();
-	for(int i=0; i < filas; i++)
-	{
-		m[i] = new int[columnas]();
-	}
-	return m;
-}
-
-int calcularCombinacion(int N, int K) {
-    if (K > N) {
-        return 0;
-    } else if (N == K || K == 0){
-        return 1;
-    }
-
-    int** combinaciones = initMatriz(N+1, K+1);
-
-    for (int i = 0; i <= N; i++) {
-        combinaciones[i][0] = 1;
-    }
-
-    // Calcular las combinaciones utilizando la fórmula C(n, k) = C(n-1, k-1) + C(n-1, k)
-    for (int n = 1; n <= N; n++) {
-        for (int k = 1; k <= min(n, K); k++) {
-            combinaciones[n][k] = combinaciones[n-1][k-1] + combinaciones[n-1][k];
+void combinacion(long long n, long long ni, long long k, long long*& actual, long long*& aux, long long*& anterior, bool*& nivelesCalculados) {
+    if (nivelesCalculados[ni]) {
+        for (long long i = 0; i <= n; i++) {
+            anterior[i] = actual[i];
+            actual[i] = aux[i];
         }
+        return;
     }
 
-    return combinaciones[N][K];
+    aux[0] = 1;
+    for (long long i = 1; i <= n; i++)
+        aux[i] = anterior[i - 1] + anterior[i];
+
+    for (long long i = 0; i <= n; i++) {
+        anterior[i] = actual[i];
+        actual[i] = aux[i];
+    }
+
+    nivelesCalculados[ni] = true;
 }
 
 int main() {
-    int N, P;
-    cin >> N >> P;
+    long long n, p;
+    cin >> n;
+    cin >> p;
 
-    int** casos = initMatriz(P,2);
-    for (int i = 0; i < P; i++) {
-        cin >> casos[i][0] >> casos[i][1];
+    long long* actual = new long long[n + 1]();
+    long long* aux = new long long[n + 1]();
+    long long* anterior = new long long[n + 1]();
+    bool* nivelesCalculados = new bool[n + 1]();
+    actual[0] = 1;
+    aux[0] = 1;
+    anterior[0] = 1;
+
+    bool nivelNuevo = true;
+    long long nAnterior = -1;
+    long long construidoHasta = 0;
+
+    for (long long i = 0; i < p; i++) {
+        long long ni, ki;
+        cin >> ni;
+        cin >> ki;
+
+        if (ni != 0)
+            combinacion(n, ni, ki, actual, aux, anterior, nivelesCalculados);
+        cout << actual[ki] << endl;
     }
 
-    for (int i = 0; i < P; i++) {
-        int result = calcularCombinacion(casos[i][0], casos[i][1]);
-        cout << result << endl;
-    }
-
+    delete[] actual;
+    delete[] nivelesCalculados;
+    delete[] anterior;
+    delete[] aux;
     return 0;
 }
