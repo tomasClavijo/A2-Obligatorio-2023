@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <cstring>
+/* Librería incluída para la potencia en la función de Hash */
 #include <math.h>
 using namespace std;
 
@@ -39,10 +40,13 @@ class Hash{
             return num;
         }
 
+        /* El "if" en la funcion de Hash se realizó para evitar el desborde. 
+        Esta idea fue recomendación de un docente*/
+
         int funcionHash(string s){
             int total = 0;
             for (int i = 0; i < s.length(); i++){
-                if(i < 5){
+                if(i < 5){ 
                     total = (total + s.at(i)*(int)(pow(31,i)))%largo;
                     
                 }else{
@@ -57,7 +61,6 @@ class Hash{
             this->largo = primoSup(esperados);
             this->vec = new NodoHash[largo];
             this->cantidadAlumnos = 0;
-            //this->vecOrdenado = new NodoHash[esperados];
             for (int i =0; i < largo; i++){
                 vec[i].dato = "";
                 vec[i].promedio = 0;
@@ -75,7 +78,6 @@ class Hash{
                 vec[posicion].dato = s;
                 vec[posicion].promedio = promedio;
                 vec[posicion].hayDato = true;
-                //vecOrdenado[cantidadAlumnos] = vec[posicion];
                 cantidadAlumnos++;
             } else {
                 while (posicion < largo && vec[posicion].hayDato == true){
@@ -96,13 +98,11 @@ class Hash{
                     vec[posicion].dato = s;
                     vec[posicion].promedio = promedio;
                     vec[posicion].hayDato = true;
-                    //vecOrdenado[cantidadAlumnos] = vec[posicion];
                     cantidadAlumnos++;
                 } else {
                     vec[posicion].dato = s;
                     vec[posicion].promedio = promedio;
                     vec[posicion].hayDato = true;
-                    //vecOrdenado[cantidadAlumnos] = vec[posicion];
                     cantidadAlumnos++;
                 }
             }
@@ -141,17 +141,15 @@ class Hash{
 };
 
 int main(){
-    int cantidadAlumnos = 0; // Lineas que se esperan
+    int cantidadAlumnos = 0; // A
     int promedio = 0; 
     cin >> cantidadAlumnos;
     Hash* h = new Hash(cantidadAlumnos);
-    //string vecNombres [cantidadAlumnos];
     for(int i = 0; i < cantidadAlumnos; i++){
         string nombre;
         int cantidadNotas = 0;
         int sumaTotal= 0;
         cin >> nombre >> cantidadNotas;
-        //vecNombres[i] = nombre;
         for (int j = 0; j < cantidadNotas; j++){
             int x;
             cin >> x;
@@ -162,5 +160,4 @@ int main(){
         NodoHash x = h->buscar(nombre);
         cout << x.dato << " " << x.promedio << endl;
     }
-    //h->imprimirElementos(vecNombres);
 }
