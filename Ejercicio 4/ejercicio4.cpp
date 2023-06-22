@@ -1,3 +1,6 @@
+/* Comentario: Debido a que los archivos de prueba no presentan endl al final, y sí un espacio despues del "]", modifiqué la salida para que sea igual
+Sin embargo, esto genera que en ocasiones, siendo los datos los mismos, figure "No newline at end of file" al utilizar diff */
+
 #include <iostream>
 #include <cstring>
 #include <string>
@@ -14,6 +17,15 @@ struct NodoLista {
     NodoLista(int _origen, int _destino, int _habilitado, int _distancia)
         : origen(_origen), destino(_destino), habilitado(_habilitado), distancia(_distancia), sig(nullptr) {}
 };
+
+struct ResultadoDijkstra {
+    int distancia;
+    string camino;
+
+    ResultadoDijkstra(int _distancia, const string& _camino)
+        : distancia(_distancia), camino(_camino) {}
+};
+
 
 class Grafo {
 private:
@@ -107,7 +119,7 @@ int posMinNoVis(int* dist, bool* vis, int tope) {
     return posMin;
 }
 
-pair<int, string> dijkstra(const Grafo& grafo, int origen, int destino) {
+ResultadoDijkstra dijkstra(const Grafo& grafo, int origen, int destino) {
     const int V = grafo.getV();
     int* dist = new int[V + 1];
     bool* visitado = new bool[V + 1];
@@ -154,7 +166,7 @@ pair<int, string> dijkstra(const Grafo& grafo, int origen, int destino) {
     delete[] visitado;
     delete[] previo;
 
-    return make_pair(dist[destino], "[" + camino + "]" + " ");
+    return ResultadoDijkstra(dist[destino], "[" + camino + "]" + " ");
 }
 
 int main() {
@@ -190,9 +202,9 @@ int main() {
     int C1, C2;
     cin >> C1 >> C2;
 
-    pair<int, string> resultado = dijkstra(grafo, C1, C2);
-    cout << resultado.first << endl;
-    cout << resultado.second;
+    ResultadoDijkstra resultado = dijkstra(grafo, C1, C2);
+    cout << resultado.distancia << endl;
+    cout << resultado.camino;
 
 
     return 0;
