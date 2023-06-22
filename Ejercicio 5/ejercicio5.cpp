@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cstring>
 #include <string>
-#include <cassert>
 
 using namespace std;
 
@@ -162,20 +161,23 @@ class MinHeap{
             delete [] arr;
         }
         void insertar (Nodo* elemento){
-            assert(!estaLleno());
-            arr[proximoLibre] = elemento;
-            proximoLibre++;
-            flotar(proximoLibre - 1);
+            if(!estaLleno()){
+                arr[proximoLibre] = elemento;
+                proximoLibre++;
+                flotar(proximoLibre - 1);
+            }
         }
         void eliminarMin(){
-            assert(!esVacio());
-            arr[1] = arr[proximoLibre - 1];
-            proximoLibre--;
-            hundir(1);
+            if (!esVacio()){
+                arr[1] = arr[proximoLibre - 1];
+                proximoLibre--;
+                hundir(1);
+            }
         }
         Nodo* getMin(){
-            assert(!esVacio());
-            return arr[1];
+            if(!esVacio()){
+                return arr[1];
+            }
         }
         bool esVacio(){
             return proximoLibre == 1;
