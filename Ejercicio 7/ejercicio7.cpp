@@ -12,6 +12,14 @@ int ** initMatriz(int filas, int columnas){
 	return m;
 }
 
+void deleteMatriz(int** matriz, int filas) {
+    for (int i = 0; i < filas; i++) {
+        delete[] matriz[i];
+    }
+    delete[] matriz;
+}
+
+
 int max_puntaje_archivos(int** archivos, int N, int S, int L) {
     int** matriz = initMatriz(L+1, S+1);
 
@@ -46,6 +54,8 @@ int main() {
     int puntaje_maximo = max_puntaje_archivos(archivos, N, S, L);
 
     cout << puntaje_maximo << endl;
+
+    deleteMatriz(archivos, N);
 
     return 0;
 }
