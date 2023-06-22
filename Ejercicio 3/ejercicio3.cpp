@@ -1,7 +1,8 @@
 #include <iostream>
 #include <string>
 #include <cstring>
-#include <cstdio>
+/* Librería incluída para usar printf() */
+#include <cstdio> 
 
 using namespace std;
 
