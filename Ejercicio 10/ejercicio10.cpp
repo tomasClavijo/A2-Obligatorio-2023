@@ -3,26 +3,26 @@
 
 using namespace std;
 
-const int MAX = 100;
-
+// Estructura para representar las coordenadas x, y en una matriz.
 struct Posicion {
     int x;
     int y;
 };
 
-// Verifico si la posicion es valida al realizar un movimiento
+// Verifico si la posicion es valida dentro de los limites de la matriz.
 bool esPosicionValida(int x, int y, int M, int N) {
     return x >= 0 && x < M && y >= 0 && y < N;
 }
 
-// Busca el camino mas corto desde un origen hasta un destino
-int caminoMasCorto(char matriz[][MAX], int M, int N, Posicion origen, Posicion destino, bool visitados[][MAX], int distancia, bool pasoXBedelia) {
+// Busca el camino mas corto desde un origen a un destino. Exploro todas las posibles vias.
+int caminoMasCorto(char** matriz, int M, int N, Posicion origen, Posicion destino, bool** visitados, int distancia, bool pasoXBedelia) {
     if (origen.x == destino.x && origen.y == destino.y && pasoXBedelia) {
         return distancia;
     }
 
     visitados[origen.x][origen.y] = true;
-
+    
+    // Direcciones posibles
     int dx[] = {-1, 1, 0, 0};
     int dy[] = {0, 0, -1, 1};
 
@@ -33,9 +33,9 @@ int caminoMasCorto(char matriz[][MAX], int M, int N, Posicion origen, Posicion d
         int nuevoY = origen.y + dy[i];
 
         if (esPosicionValida(nuevoX, nuevoY, M, N) && !visitados[nuevoX][nuevoY] && matriz[nuevoX][nuevoY] != 'P') {
-            Posicion next = {nuevoX, nuevoY};
-            bool nextpasoXBedelia = pasoXBedelia || (matriz[nuevoX][nuevoY] == 'B');
-            int longitud = caminoMasCorto(matriz, M, N, next, destino, visitados, distancia + 1, nextpasoXBedelia);
+            Posicion siguiente = {nuevoX, nuevoY};
+            bool proxPasoXBedelia = pasoXBedelia || (matriz[nuevoX][nuevoY] == 'B');
+            int longitud = caminoMasCorto(matriz, M, N, siguiente, destino, visitados, distancia + 1, proxPasoXBedelia);
 
             if (longitud != 0 && (masCorto == 0 || longitud < masCorto)) {
                 masCorto = longitud;
@@ -51,10 +51,11 @@ int caminoMasCorto(char matriz[][MAX], int M, int N, Posicion origen, Posicion d
 int main() {
     int M, N;
     cin >> M >> N;
-
-    char matriz[MAX][MAX]; // INTENTAR DEFINIR LA MATRIZ EN OTRA FUNCION Y SACAR DEL CAMINO AL MAX. 
-
+    
+    // Configuracion de la facultad
+    char** matriz = new char*[M];
     for (int i = 0; i < M; i++) {
+        matriz[i] = new char[N];
         for (int j = 0; j < N; j++) {
             cin >> matriz[i][j];
         }
@@ -63,6 +64,7 @@ int main() {
     int P;
     cin >> P;
 
+    // Casos de prueba
     for (int i = 0; i < P; i++) {
         int xi, yi, xf, yf;
         cin >> xi >> yi >> xf >> yf;
@@ -75,8 +77,13 @@ int main() {
         Posicion comienzo = {xi, yi};
         Posicion destino = {xf, yf};
 
-        bool visitados[MAX][MAX];
-        memset(visitados, false, sizeof(visitados));
+        bool** visitados = new bool*[M];
+        for (int j = 0; j < M; j++) {
+            visitados[j] = new bool[N];
+            for (int k = 0; k < N; k++) {
+                visitados[j][k] = false;
+            }
+        }
 
         int longitud = caminoMasCorto(matriz, M, N, comienzo, destino, visitados, 0, false);
 
@@ -85,7 +92,17 @@ int main() {
         } else {
             cout << longitud + 1 << endl;
         }
+
+        for (int j = 0; j < M; j++) {
+            delete[] visitados[j];
+        }
+        delete[] visitados;
     }
+
+    for (int i = 0; i < M; i++) {
+        delete[] matriz[i];
+    }
+    delete[] matriz;
 
     return 0;
 }
