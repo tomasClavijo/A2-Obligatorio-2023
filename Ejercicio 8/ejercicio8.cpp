@@ -13,13 +13,11 @@ void merge(int* arr, int izq, int medio, int der) {
     int* L = new int[n1];
     int* R = new int[n2];
 
-    // Copiar datos a los arreglos temporales L[] y R[]
     for (i = 0; i < n1; i++)
         L[i] = arr[izq + i];
     for (j = 0; j < n2; j++)
         R[j] = arr[medio + 1 + j];
 
-    // Combinar los arreglos temporales de nuevo en arr[izq..der]
     i = 0;
     j = 0;
     k = izq;
@@ -33,13 +31,11 @@ void merge(int* arr, int izq, int medio, int der) {
         }
         k++;
     }
-    // Copiar los elementos restantes de L[], si hay alguno
     while (i < n1) {
         arr[k] = L[i];
         i++;
         k++;
     }
-    // Copiar los elementos restantes de R[], si hay alguno
     while (j < n2) {
         arr[k] = R[j];
         j++;
@@ -54,11 +50,9 @@ void mergeSort(int* arr, int izq, int der) {
     if (izq < der) {
         int medio = izq + (der - izq) / 2;
 
-        // Ordenar la primera y segunda mitad
         mergeSort(arr, izq, medio);
         mergeSort(arr, medio + 1, der);
 
-        // Combinar las mitades ordenadas
         merge(arr, izq, medio, der);
     }
 }
