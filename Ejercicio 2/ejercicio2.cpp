@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 
+// AVL cumple con O(P * Log2 (P)) en búsqueda e inserción.
+
 using namespace std;
 
 struct Nodo {
