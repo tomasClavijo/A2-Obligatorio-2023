@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <string>
-// revisar
+
 using namespace std;
 
 struct NodoLista {
