@@ -160,4 +160,5 @@ int main(){
         NodoHash x = h->buscar(nombre);
         cout << x.dato << " " << x.promedio << endl;
     }
+    delete h;
 }
