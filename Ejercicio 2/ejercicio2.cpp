@@ -120,6 +120,14 @@ void mostrarPalabras(Nodo* nodo) {
     }
 }
 
+void liberarArbol(Nodo* nodo) {
+    if (nodo != nullptr) {
+        liberarArbol(nodo->izquierdo);
+        liberarArbol(nodo->derecho);
+        delete nodo;
+    }
+}
+
 int main() {
     int P;
     cin >> P;
@@ -139,6 +147,7 @@ int main() {
     }
 
     mostrarPalabras(raiz);
+    liberarArbol(raiz);
 
     return 0;
 }
