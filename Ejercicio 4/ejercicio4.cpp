@@ -194,7 +194,6 @@ int main() {
     cout << resultado.first << endl;
     cout << resultado.second << endl;
 
+
     return 0;
 }
-
-
