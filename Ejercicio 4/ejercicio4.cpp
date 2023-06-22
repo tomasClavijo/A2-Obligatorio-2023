@@ -154,7 +154,7 @@ pair<int, string> dijkstra(const Grafo& grafo, int origen, int destino) {
     delete[] visitado;
     delete[] previo;
 
-    return make_pair(dist[destino], "[" + camino + "]");
+    return make_pair(dist[destino], "[" + camino + "]" + " ");
 }
 
 int main() {
@@ -192,7 +192,7 @@ int main() {
 
     pair<int, string> resultado = dijkstra(grafo, C1, C2);
     cout << resultado.first << endl;
-    cout << resultado.second << endl;
+    cout << resultado.second;
 
 
     return 0;
