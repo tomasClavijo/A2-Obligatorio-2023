@@ -41,7 +41,7 @@ class Hash{
         }
 
         /* El "if" en la funcion de Hash se realizó para evitar el desborde. 
-        Esta idea fue recomendación de un docente*/
+        Esta idea fue recomendación de los docentes del semestre pasado */
 
         int funcionHash(string s){
             int total = 0;
